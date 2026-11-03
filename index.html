@@ -1,0 +1,725 @@
+<title>Sanab ko‘r!</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@600;700;800&display=swap">
+<style>
+/* Layout: a sunny toy-box playroom. Left: a meadow tray where objects sit in egg-carton rows of five.
+   Right: a chunky toy keypad with a big number window. Stacks to one column on phones. */
+:root {
+  --bg: #d9f1ff;
+  --bg-hill: #c3ebc9;
+  --card: #ffffff;
+  --tray: #fff6dc;
+  --tray-edge: #f1dca0;
+  --ink: #233152;
+  --muted: #5f6f8c;
+  --sun: #ffc93c;
+  --sun-edge: #e0a514;
+  --sky: #4fb3ff;
+  --sky-edge: #2b88d6;
+  --pink: #ff7eb6;
+  --pink-edge: #d9558f;
+  --grass: #3fbf6a;
+  --grass-edge: #2a9550;
+  --coral: #ff6b5b;
+  --coral-edge: #d6483a;
+  --berry: #8d6cf0;
+  --berry-edge: #6a4bcc;
+  --badge: #233152;
+  --badge-ink: #ffffff;
+  --key-ink: #233152;
+  --shadow: rgba(35, 49, 82, .14);
+  --font-display: "Baloo 2", "Comic Sans MS", "Trebuchet MS", system-ui, sans-serif;
+  --font-body: "Nunito", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14213d; --bg-hill: #1b3a35; --card: #1e2d4f; --tray: #2a3a60; --tray-edge: #3b4f7d;
+    --ink: #f2f6ff; --muted: #a8b8d6; --badge: #ffc93c; --badge-ink: #14213d; --key-ink: #14213d;
+    --shadow: rgba(0, 0, 0, .35);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #14213d; --bg-hill: #1b3a35; --card: #1e2d4f; --tray: #2a3a60; --tray-edge: #3b4f7d;
+  --ink: #f2f6ff; --muted: #a8b8d6; --badge: #ffc93c; --badge-ink: #14213d; --key-ink: #14213d;
+  --shadow: rgba(0, 0, 0, .35);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { min-height: 100%; }
+body {
+  background:
+    radial-gradient(120% 60% at 50% 115%, var(--bg-hill) 0 45%, transparent 46%),
+    var(--bg);
+  background-attachment: fixed;
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+button { font: inherit; color: inherit; cursor: pointer; touch-action: manipulation; }
+button:focus-visible { outline: 4px solid var(--sky); outline-offset: 3px; }
+
+.app {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding-block: 14px 24px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* chunky toy button */
+.toy {
+  border: 0;
+  border-radius: 22px;
+  background: var(--c, var(--sun));
+  box-shadow: 0 7px 0 var(--ce, var(--sun-edge)), 0 12px 18px var(--shadow);
+  transform: translateY(0);
+  transition: transform .08s, box-shadow .08s;
+}
+.toy:active, .toy.pressed {
+  transform: translateY(6px);
+  box-shadow: 0 1px 0 var(--ce, var(--sun-edge)), 0 4px 8px var(--shadow);
+}
+
+/* ---------- start screen ---------- */
+.start { display: grid; gap: 22px; justify-items: center; text-align: center; padding-top: 2vh; }
+.parade { font-size: clamp(34px, 7vw, 54px); display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.parade span { display: inline-block; animation: hop 2.4s ease-in-out infinite; }
+.parade span:nth-child(2) { animation-delay: .2s } .parade span:nth-child(3) { animation-delay: .4s }
+.parade span:nth-child(4) { animation-delay: .6s } .parade span:nth-child(5) { animation-delay: .8s }
+@keyframes hop { 0%, 60%, 100% { transform: translateY(0) } 30% { transform: translateY(-14px) rotate(-6deg) } }
+h1 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(54px, 12vw, 104px);
+  line-height: .95;
+  margin: 0;
+  letter-spacing: -.01em;
+  text-wrap: balance;
+}
+h1 .b1 { color: var(--coral) } h1 .b2 { color: var(--sky) } h1 .b3 { color: var(--grass) }
+.lead { font-size: clamp(18px, 3.4vw, 24px); font-weight: 800; color: var(--muted); margin: -6px 0 0; }
+.levels { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; width: 100%; max-width: 860px; margin-top: 8px; }
+.level {
+  display: grid; justify-items: center; gap: 2px;
+  padding: 18px 10px 16px;
+  color: var(--key-ink);
+}
+.level .ico { font-size: clamp(40px, 8vw, 58px); line-height: 1; }
+.level .rng { font-family: var(--font-display); font-weight: 800; font-size: clamp(40px, 9vw, 68px); line-height: 1; font-variant-numeric: tabular-nums; }
+.level .nm { font-weight: 800; font-size: clamp(15px, 2.6vw, 19px); }
+.level.l1 { --c: var(--sun); --ce: var(--sun-edge); }
+.level.l2 { --c: var(--grass); --ce: var(--grass-edge); }
+.level.l3 { --c: var(--berry); --ce: var(--berry-edge); color: #fff; }
+.helpline { color: var(--muted); font-weight: 700; font-size: 15px; max-width: 560px; line-height: 1.5; margin: 6px 0 0; }
+.voice-note { color: var(--muted); font-size: 13px; font-weight: 700; opacity: .85; }
+@media (max-width: 560px) {
+  .levels { grid-template-columns: 1fr; gap: 16px; }
+  .level { grid-template-columns: auto 1fr; grid-template-rows: auto auto; justify-items: start; column-gap: 16px; padding: 12px 20px; text-align: left; }
+  .level .ico { grid-row: span 2; align-self: center; }
+}
+
+/* ---------- top bar ---------- */
+.topbar { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.roundbtn {
+  width: 56px; height: 56px; flex: none;
+  display: grid; place-items: center;
+  font-size: 26px;
+  --c: var(--card); --ce: var(--tray-edge);
+  border-radius: 18px;
+}
+.stars { flex: 1; display: flex; justify-content: center; gap: clamp(0px, .8vw, 8px); min-width: 0; overflow: hidden; padding: 6px 0; }
+.star { font-size: clamp(14px, calc((100vw - 200px) / 10), 34px); line-height: 1; filter: grayscale(1) opacity(.3); transition: filter .3s, transform .3s; }
+.star.now { filter: grayscale(1) opacity(.55); animation: pulse 1s ease-in-out infinite; }
+.star.gold { filter: none; }
+.star.silver { filter: saturate(.35) brightness(1.15); }
+@keyframes pulse { 50% { transform: scale(1.25) } }
+
+/* ---------- game layout ---------- */
+.game { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 20px; align-items: start; }
+@media (max-width: 860px) { .game { grid-template-columns: minmax(0, 1fr); } .pad-col { max-width: 440px; width: 100%; justify-self: center; } }
+
+.board {
+  background: var(--card);
+  border-radius: 30px;
+  box-shadow: 0 10px 30px var(--shadow);
+  padding: 16px clamp(12px, 2.5vw, 22px) 18px;
+  display: grid; gap: 14px;
+  min-width: 0;
+}
+.ask { display: flex; align-items: center; gap: 12px; }
+.owl { font-size: clamp(44px, 8vw, 60px); line-height: 1; flex: none; }
+.owl.happy { animation: wiggle .6s ease-in-out 2; }
+@keyframes wiggle { 25% { transform: rotate(-12deg) scale(1.1) } 75% { transform: rotate(12deg) scale(1.1) } }
+.bubble {
+  position: relative; flex: 1; min-width: 0;
+  background: var(--tray); border: 3px solid var(--tray-edge);
+  border-radius: 20px; padding: 10px 16px;
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(20px, 3.6vw, 28px); line-height: 1.15;
+}
+.bubble::before {
+  content: ""; position: absolute; left: -12px; top: 50%; translate: 0 -50%;
+  border: 10px solid transparent; border-right-color: var(--tray-edge); border-left: 0;
+}
+.speak { width: 56px; height: 56px; flex: none; font-size: 26px; display: grid; place-items: center; --c: var(--sky); --ce: var(--sky-edge); border-radius: 50%; }
+
+.field {
+  display: flex; flex-wrap: wrap; justify-content: center; align-content: center;
+  gap: 18px 26px;
+  min-height: 260px;
+  padding: 8px 0;
+}
+.ten { display: grid; gap: 10px; align-content: start; }
+.group {
+  display: flex; gap: 6px;
+  background: var(--tray);
+  border: 3px dashed var(--tray-edge);
+  border-radius: 22px;
+  padding: 6px;
+  justify-self: start;
+}
+.obj {
+  position: relative;
+  width: var(--slot); height: var(--slot);
+  font-size: var(--emo); line-height: 1;
+  display: grid; place-items: center;
+  border: 0; background: transparent; padding: 0;
+  border-radius: 16px;
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+  animation: pop .45s cubic-bezier(.3, 1.6, .5, 1) both;
+}
+.obj:hover { background: color-mix(in srgb, var(--sun) 25%, transparent); }
+.obj.counted { background: color-mix(in srgb, var(--sun) 35%, transparent); }
+.obj.flash { animation: bounce .45s ease-out; }
+.obj .n {
+  position: absolute; top: -6px; right: -6px;
+  min-width: 26px; height: 26px; padding: 0 5px;
+  border-radius: 13px; background: var(--badge); color: var(--badge-ink);
+  font: 800 16px/26px var(--font-display); text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+@keyframes pop { from { transform: scale(0) rotate(-20deg); opacity: 0 } }
+@keyframes bounce { 40% { transform: translateY(-14px) scale(1.15) } }
+.field[data-size="xl"] { --slot: 96px; --emo: 70px; }
+.field[data-size="l"]  { --slot: 72px; --emo: 52px; }
+.field[data-size="m"]  { --slot: 58px; --emo: 42px; }
+@media (max-width: 480px) {
+  .field[data-size="xl"] { --slot: 74px; --emo: 54px; }
+  .field[data-size="l"]  { --slot: 56px; --emo: 41px; }
+  .field[data-size="m"]  { --slot: 50px; --emo: 36px; }
+  .group { gap: 4px; padding: 5px; }
+  .field { min-height: 200px; }
+}
+.board-foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.tip { color: var(--muted); font-weight: 700; font-size: 15px; }
+.recount {
+  --c: var(--tray); --ce: var(--tray-edge);
+  padding: 8px 16px; border-radius: 16px; font-weight: 800; font-size: 16px;
+  box-shadow: 0 4px 0 var(--ce);
+}
+
+/* ---------- keypad ---------- */
+.pad-col { display: grid; gap: 16px; }
+.screen {
+  height: 104px;
+  border-radius: 26px;
+  background: var(--card);
+  box-shadow: inset 0 0 0 5px var(--tray-edge), 0 10px 30px var(--shadow);
+  display: grid; place-items: center;
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 78px; line-height: 1;
+  font-variant-numeric: tabular-nums;
+  transition: background .2s, box-shadow .2s;
+}
+.screen .q { color: var(--muted); opacity: .45; animation: blink 1.2s steps(2) infinite; }
+@keyframes blink { 50% { opacity: .15 } }
+.screen.ok { box-shadow: inset 0 0 0 6px var(--grass), 0 10px 30px var(--shadow); color: var(--grass); }
+.screen.no { box-shadow: inset 0 0 0 6px var(--coral), 0 10px 30px var(--shadow); color: var(--coral); animation: shake .45s; }
+@keyframes shake { 20%, 60% { transform: translateX(-10px) } 40%, 80% { transform: translateX(10px) } }
+.keys { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px 12px; }
+.key {
+  height: clamp(66px, 10vh, 82px);
+  font-family: var(--font-display); font-weight: 800; font-size: 44px; line-height: 1;
+  color: var(--key-ink);
+  display: grid; place-items: center;
+}
+.key.c0 { --c: var(--sun); --ce: var(--sun-edge); }
+.key.c1 { --c: var(--sky); --ce: var(--sky-edge); }
+.key.c2 { --c: var(--pink); --ce: var(--pink-edge); }
+.key.del { --c: var(--coral); --ce: var(--coral-edge); color: #fff; font-size: 34px; }
+.key.ok { --c: var(--grass); --ce: var(--grass-edge); color: #fff; font-size: 40px; }
+.key.ok.ready { animation: pulse 1s ease-in-out infinite; }
+
+/* ---------- overlay ---------- */
+.overlay {
+  position: fixed; inset: 0; z-index: 20;
+  display: grid; place-items: center;
+  background: color-mix(in srgb, var(--bg) 75%, transparent);
+  backdrop-filter: blur(4px);
+  padding: 16px max(16px, env(safe-area-inset-right, 0px)) 16px max(16px, env(safe-area-inset-left, 0px));
+}
+.end-card {
+  background: var(--card); border-radius: 34px; box-shadow: 0 20px 50px var(--shadow);
+  padding: 28px 24px; max-width: 520px; width: 100%;
+  display: grid; gap: 14px; justify-items: center; text-align: center;
+}
+.end-card .big { font-size: 84px; line-height: 1; animation: wiggle .7s ease-in-out 2; }
+.end-card h2 { font-family: var(--font-display); font-weight: 800; font-size: clamp(36px, 8vw, 52px); margin: 0; line-height: 1; color: var(--coral); }
+.end-stars { font-size: clamp(26px, 6vw, 36px); display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; }
+.end-card p { margin: 0; font-weight: 800; font-size: 20px; color: var(--muted); }
+.end-btns { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-top: 6px; }
+.end-btns .toy { padding: 14px 22px; font-family: var(--font-display); font-weight: 800; font-size: 22px; color: var(--key-ink); }
+.end-btns .again { --c: var(--grass); --ce: var(--grass-edge); color: #fff; }
+
+#confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 30; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+</style>
+
+<div class="app">
+  <!-- START -->
+  <section class="start" id="startScreen">
+    <div class="parade" aria-hidden="true"><span>🍎</span><span>🚗</span><span>🐶</span><span>🦋</span><span>🎈</span></div>
+    <h1><span class="b1">Sanab</span> <span class="b2">ko‘r</span><span class="b3">!</span></h1>
+    <p class="lead">Rasmlarni sana va sonni ter</p>
+    <div class="levels">
+      <button class="toy level l1" data-max="5" id="lvl5"><span class="ico">🐣</span><span class="rng">1–5</span><span class="nm">Kichkintoy</span></button>
+      <button class="toy level l2" data-max="10" id="lvl10"><span class="ico">🐰</span><span class="rng">1–10</span><span class="nm">Bilag‘on</span></button>
+      <button class="toy level l3" data-max="20" id="lvl20"><span class="ico">🦁</span><span class="rng">1–20</span><span class="nm">Zukko</span></button>
+    </div>
+    <p class="helpline">Har bir o‘yinda 10 ta savol. Rasmlarga bosib birga sanash mumkin: har bosilganda son ovoz bilan aytiladi. Keyin pastdagi raqamlardan javobni terib, yashil ✓ tugmasini bosing.</p>
+    <p class="voice-note" id="voiceNote"></p>
+  </section>
+
+  <!-- GAME -->
+  <section id="gameScreen" hidden>
+    <div class="topbar">
+      <button class="toy roundbtn" id="homeBtn" aria-label="Bosh sahifa">🏠</button>
+      <div class="stars" id="stars" aria-label="Yulduzlar"></div>
+      <button class="toy roundbtn" id="soundBtn" aria-label="Ovozni o‘chirish yoki yoqish">🔊</button>
+    </div>
+    <div class="game">
+      <div class="board">
+        <div class="ask">
+          <div class="owl" id="owl" aria-hidden="true">🦉</div>
+          <div class="bubble" id="bubble" aria-live="polite">Nechta olma bor?</div>
+          <button class="toy speak" id="speakBtn" aria-label="Savolni qayta eshitish">🔈</button>
+        </div>
+        <div class="field" id="field" data-size="xl"></div>
+        <div class="board-foot">
+          <span class="tip">👆 Rasmga bosib sana</span>
+          <button class="toy recount" id="recountBtn">↺ Qaytadan sanash</button>
+        </div>
+      </div>
+      <div class="pad-col">
+        <div class="screen" id="screen" aria-live="polite"><span class="q">?</span></div>
+        <div class="keys" id="keys"></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- END -->
+<div class="overlay" id="endScreen" hidden>
+  <div class="end-card">
+    <div class="big" id="endEmoji">🏆</div>
+    <h2 id="endTitle">Barakalla!</h2>
+    <div class="end-stars" id="endStars"></div>
+    <p id="endText"></p>
+    <div class="end-btns">
+      <button class="toy again" id="againBtn">↻ Yana o‘ynash</button>
+      <button class="toy" id="levelsBtn">🏠 Darajalar</button>
+    </div>
+  </div>
+</div>
+<canvas id="confetti" aria-hidden="true"></canvas>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const ROUNDS = 10;
+
+  const THINGS = [
+    ["🍎", "olma"], ["🍌", "banan"], ["🍓", "qulupnay"], ["🍐", "nok"], ["🍊", "apelsin"],
+    ["🍒", "gilos"], ["🥕", "sabzi"], ["🍉", "tarvuz"], ["🚗", "mashina"], ["🚌", "avtobus"],
+    ["🚀", "raketa"], ["⛵", "qayiq"], ["🚲", "velosiped"], ["🐶", "kuchukcha"], ["🐱", "mushukcha"],
+    ["🐰", "quyoncha"], ["🐥", "jo‘ja"], ["🐟", "baliq"], ["🦋", "kapalak"], ["🐞", "xonqizi"],
+    ["🐸", "qurbaqa"], ["⭐", "yulduzcha"], ["🎈", "shar"], ["⚽", "to‘p"], ["🌸", "gul"], ["🧸", "ayiqcha"]
+  ];
+  const WORDS = ["nol", "bir", "ikki", "uch", "to‘rt", "besh", "olti", "yetti", "sakkiz", "to‘qqiz", "o‘n"];
+  const word = (n) => n <= 10 ? WORDS[n] : n < 20 ? "o‘n " + WORDS[n - 10] : n === 20 ? "yigirma" : String(n);
+  // "beshta", "bitta", "o‘n bitta", "yigirmata"
+  const ta = (n) => word(n).replace(/bir$/, "bit") + "ta";
+  const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+  const pick = (a) => a[Math.floor(Math.random() * a.length)];
+  const PRAISE = ["Barakalla!", "Ofarin!", "Zo‘r!", "Juda yaxshi!", "Qoyil!", "Mana bu zo‘r!"];
+
+  /* ---------------- voice (Web Speech) ---------------- */
+  let voice = null, voiceLang = "uz";
+  let soundOn = true;
+  try { soundOn = localStorage.getItem("sanash-sound") !== "off"; } catch (e) {}
+  const hasSpeech = "speechSynthesis" in window;
+
+  function chooseVoice() {
+    if (!hasSpeech) return;
+    const vs = speechSynthesis.getVoices();
+    voice = null;
+    for (const p of ["uz", "tr", "az", "kk"]) {
+      const v = vs.find((v) => v.lang && v.lang.toLowerCase().replace("_", "-").startsWith(p));
+      if (v) { voice = v; voiceLang = p; break; }
+    }
+    const names = { uz: "o‘zbekcha", tr: "turkcha", az: "ozarbayjoncha", kk: "qozoqcha" };
+    const note = $("voiceNote");
+    if (!hasSpeech) note.textContent = "Bu brauzerda ovozli aytish yo‘q, tovush effektlari ishlaydi.";
+    else if (!voice) note.textContent = vs.length ? "O‘zbekcha ovoz topilmadi, standart ovoz ishlatiladi. Eng yaxshi ovoz Microsoft Edge brauzerida." : "";
+    else if (voiceLang === "uz") note.textContent = "Ovoz: o‘zbekcha 🎙️";
+    else note.textContent = "Ovoz: " + names[voiceLang] + " (o‘zbekcha ovoz topilmadi). O‘zbekcha ovoz uchun Microsoft Edge brauzerini oching.";
+  }
+  if (hasSpeech) {
+    chooseVoice();
+    speechSynthesis.addEventListener?.("voiceschanged", chooseVoice);
+  } else chooseVoice();
+
+  // Make Uzbek Latin readable for a Turkish/Azerbaijani voice.
+  function forVoice(text) {
+    let t = text.replace(/[‘’ʻʼ`]/g, "'");
+    if (voiceLang === "tr" || voiceLang === "az") {
+      t = t.replace(/o'/gi, "o").replace(/g'/gi, "ğ")
+           .replace(/ch/gi, "ç").replace(/sh/gi, "ş")
+           .replace(/j/gi, "c");
+      if (voiceLang === "tr") t = t.replace(/q/gi, "k").replace(/x/gi, "h");
+    }
+    return t;
+  }
+  function say(text, interrupt = true) {
+    if (!soundOn || !hasSpeech) return;
+    try {
+      if (interrupt) speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(forVoice(text));
+      if (voice) { u.voice = voice; u.lang = voice.lang; } else u.lang = "uz-UZ";
+      u.rate = 0.88; u.pitch = 1.15;
+      speechSynthesis.speak(u);
+    } catch (e) {}
+  }
+
+  /* ---------------- sound effects (Web Audio) ---------------- */
+  let ac = null;
+  function audio() {
+    if (!ac) { try { ac = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return null; } }
+    if (ac.state === "suspended") ac.resume();
+    return ac;
+  }
+  function tone(freq, dur, type = "sine", vol = 0.18, when = 0, slideTo = null) {
+    if (!soundOn) return;
+    const a = audio(); if (!a) return;
+    const t0 = a.currentTime + when;
+    const o = a.createOscillator(), g = a.createGain();
+    o.type = type; o.frequency.setValueAtTime(freq, t0);
+    if (slideTo) o.frequency.exponentialRampToValueAtTime(slideTo, t0 + dur);
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(vol, t0 + 0.015);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    o.connect(g).connect(a.destination);
+    o.start(t0); o.stop(t0 + dur + 0.05);
+  }
+  const SCALE = [523, 587, 659, 698, 784, 880, 988, 1047, 1175, 1319];
+  const sfx = {
+    key: (d) => tone(SCALE[d % 10] * 0.75, 0.09, "triangle", 0.16),
+    del: () => tone(420, 0.12, "triangle", 0.14, 0, 260),
+    count: (i) => { const f = SCALE[(i - 1) % 10] * (i > 10 ? 2 : 1); tone(f, 0.16, "sine", 0.2); tone(f * 2, 0.08, "sine", 0.05); },
+    good: () => [523, 659, 784, 1047].forEach((f, i) => { tone(f, 0.22, "triangle", 0.2, i * 0.09); tone(f * 1.5, 0.15, "sine", 0.05, i * 0.09); }),
+    bad: () => { tone(330, 0.18, "square", 0.07, 0, 250); tone(250, 0.28, "square", 0.07, 0.17, 170); },
+    pop: () => tone(300, 0.08, "sine", 0.12, 0, 700),
+    win: () => [523, 659, 784, 659, 784, 1047, 1319].forEach((f, i) => tone(f, i === 6 ? 0.6 : 0.18, "triangle", 0.2, i * 0.12)),
+  };
+
+  /* ---------------- confetti ---------------- */
+  const cv = $("confetti"), cx = cv.getContext("2d");
+  let parts = [], raf = 0;
+  const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function confetti(amount = 110) {
+    if (reduceMotion) return;
+    const st = getComputedStyle(document.documentElement);
+    const cols = ["--sun", "--sky", "--pink", "--grass", "--coral", "--berry"].map((v) => st.getPropertyValue(v).trim());
+    cv.width = innerWidth * devicePixelRatio; cv.height = innerHeight * devicePixelRatio;
+    for (let i = 0; i < amount; i++) {
+      parts.push({
+        x: innerWidth / 2 + (Math.random() - .5) * innerWidth * .5, y: innerHeight * .45,
+        vx: (Math.random() - .5) * 16, vy: -Math.random() * 15 - 5,
+        r: Math.random() * 6 + 5, a: Math.random() * 6, va: (Math.random() - .5) * .4,
+        c: pick(cols), life: 0, round: Math.random() < .4
+      });
+    }
+    if (!raf) raf = requestAnimationFrame(tick);
+  }
+  function tick() {
+    const d = devicePixelRatio;
+    cx.clearRect(0, 0, cv.width, cv.height);
+    parts = parts.filter((p) => p.life < 120 && p.y < innerHeight + 40);
+    for (const p of parts) {
+      p.life++; p.vy += .45; p.vx *= .99; p.x += p.vx; p.y += p.vy; p.a += p.va;
+      cx.save(); cx.translate(p.x * d, p.y * d); cx.rotate(p.a); cx.fillStyle = p.c;
+      cx.globalAlpha = Math.max(0, 1 - p.life / 120);
+      if (p.round) { cx.beginPath(); cx.arc(0, 0, p.r * d * .6, 0, 7); cx.fill(); }
+      else cx.fillRect(-p.r * d / 2, -p.r * d / 4, p.r * d, p.r * d / 2);
+      cx.restore();
+    }
+    raf = parts.length ? requestAnimationFrame(tick) : 0;
+    if (!raf) cx.clearRect(0, 0, cv.width, cv.height);
+  }
+
+  /* ---------------- game state ---------------- */
+  const S = { max: 5, round: 0, target: 0, thing: null, typed: "", tries: 0, helped: false, counted: 0, busy: false, results: [], lastN: 0, lastThing: null, timers: [] };
+  const later = (fn, ms) => { const t = setTimeout(fn, ms); S.timers.push(t); return t; };
+  const clearTimers = () => { S.timers.forEach(clearTimeout); S.timers = []; };
+
+  // keypad
+  const keys = $("keys");
+  const layout = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "del", "0", "ok"];
+  layout.forEach((k, i) => {
+    const b = document.createElement("button");
+    b.className = "toy key";
+    b.dataset.k = k;
+    if (k === "del") { b.classList.add("del"); b.textContent = "⌫"; b.setAttribute("aria-label", "O‘chirish"); }
+    else if (k === "ok") { b.classList.add("ok"); b.textContent = "✓"; b.setAttribute("aria-label", "Tekshirish"); b.id = "okKey"; }
+    else { b.classList.add("c" + (i % 3)); b.textContent = k; }
+    b.addEventListener("click", () => press(k));
+    keys.appendChild(b);
+  });
+
+  function showTyped() {
+    const sc = $("screen");
+    sc.classList.remove("ok", "no");
+    sc.innerHTML = S.typed ? S.typed : '<span class="q">?</span>';
+    $("okKey").classList.toggle("ready", !!S.typed && !S.busy);
+  }
+
+  function press(k) {
+    audio();
+    if (S.busy) return;
+    if (k === "del") { if (S.typed) { S.typed = S.typed.slice(0, -1); sfx.del(); showTyped(); } return; }
+    if (k === "ok") { check(); return; }
+    const maxLen = S.max >= 10 ? 2 : 1;
+    if (S.typed.length >= maxLen) S.typed = "";
+    if (S.typed === "0") S.typed = "";
+    S.typed += k;
+    sfx.key(+k);
+    say(word(+S.typed));
+    showTyped();
+  }
+
+  function setBubble(t) { $("bubble").textContent = t; }
+
+  function renderStars() {
+    const box = $("stars"); box.innerHTML = "";
+    for (let i = 0; i < ROUNDS; i++) {
+      const s = document.createElement("span");
+      s.className = "star"; s.textContent = "⭐";
+      if (S.results[i]) s.classList.add(S.results[i]);
+      else if (i === S.round) s.classList.add("now");
+      box.appendChild(s);
+    }
+  }
+
+  function renderField() {
+    const f = $("field"), n = S.target, [emo, name] = S.thing;
+    f.innerHTML = "";
+    f.dataset.size = n <= 5 ? "xl" : n <= 10 ? "l" : "m";
+    let i = 0;
+    for (let t = 0; t < Math.ceil(n / 10); t++) {
+      const ten = document.createElement("div"); ten.className = "ten";
+      for (let g = 0; g < 2; g++) {
+        const start = t * 10 + g * 5;
+        if (start >= n) break;
+        const grp = document.createElement("div"); grp.className = "group";
+        for (let j = start; j < Math.min(start + 5, n); j++) {
+          const b = document.createElement("button");
+          b.className = "obj"; b.textContent = emo;
+          b.setAttribute("aria-label", name);
+          b.style.animationDelay = (j * 45) + "ms";
+          b.addEventListener("click", () => tapObj(b));
+          grp.appendChild(b);
+          i++;
+        }
+        ten.appendChild(grp);
+      }
+      f.appendChild(ten);
+    }
+  }
+
+  function markObj(b, num) {
+    b.classList.add("counted");
+    b.classList.remove("flash"); void b.offsetWidth; b.classList.add("flash");
+    let badge = b.querySelector(".n");
+    if (!badge) { badge = document.createElement("span"); badge.className = "n"; b.appendChild(badge); }
+    badge.textContent = num;
+  }
+
+  function tapObj(b) {
+    audio();
+    if (S.busy || b.classList.contains("counted")) { if (!S.busy) { b.classList.remove("flash"); void b.offsetWidth; b.classList.add("flash"); sfx.pop(); } return; }
+    S.counted++;
+    markObj(b, S.counted);
+    sfx.count(S.counted);
+    say(cap(word(S.counted)));
+  }
+
+  function resetCount() {
+    S.counted = 0;
+    document.querySelectorAll("#field .obj").forEach((b) => { b.classList.remove("counted"); b.querySelector(".n")?.remove(); });
+  }
+
+  function nextNumber() {
+    let n;
+    do {
+      n = 1 + Math.floor(Math.random() * S.max);
+      // on 1–20 lean towards the new numbers (6–20) most of the time
+      if (S.max === 20 && n <= 5 && Math.random() < .7) n += 5 + Math.floor(Math.random() * 10);
+    } while (n === S.lastN);
+    S.lastN = n;
+    return n;
+  }
+  function nextThing() {
+    let t; do { t = pick(THINGS); } while (t === S.lastThing);
+    S.lastThing = t; return t;
+  }
+
+  function question() { return `Nechta ${S.thing[1]} bor?`; }
+
+  function newRound() {
+    clearTimers();
+    S.target = nextNumber(); S.thing = nextThing();
+    S.typed = ""; S.tries = 0; S.helped = false; S.counted = 0; S.busy = false;
+    $("owl").classList.remove("happy");
+    renderStars(); renderField(); showTyped();
+    setBubble(question());
+    say(question() + " Sanab ko‘r!");
+  }
+
+  function startGame(max) {
+    S.max = max; S.round = 0; S.results = []; S.lastN = 0;
+    $("startScreen").hidden = true; $("endScreen").hidden = true; $("gameScreen").hidden = false;
+    scrollTo({ top: 0 });
+    newRound();
+  }
+
+  function goHome() {
+    clearTimers(); S.busy = false;
+    if (hasSpeech) speechSynthesis.cancel();
+    $("gameScreen").hidden = true; $("endScreen").hidden = true; $("startScreen").hidden = false;
+  }
+
+  function check() {
+    if (S.busy) return;
+    if (!S.typed) { setBubble("Avval sonni ter 👇"); say("Avval sonni ter"); return; }
+    const v = +S.typed;
+    const sc = $("screen");
+    if (v === S.target) {
+      S.busy = true;
+      S.results[S.round] = (S.tries === 0 && !S.helped) ? "gold" : "silver";
+      sc.classList.add("ok"); $("okKey").classList.remove("ready");
+      $("owl").classList.add("happy");
+      sfx.good(); confetti();
+      const p = pick(PRAISE);
+      const line = `${p} ${cap(ta(S.target))} ${S.thing[1]}!`;
+      setBubble(`${p} ${S.target} ta ${S.thing[0]}`);
+      say(line);
+      // show every object counted, so the child sees the full count
+      document.querySelectorAll("#field .obj").forEach((b, i) => markObj(b, i + 1));
+      renderStars();
+      later(() => {
+        S.round++;
+        if (S.round >= ROUNDS) finish(); else newRound();
+      }, 2600);
+    } else {
+      S.tries++;
+      sc.classList.remove("no"); void sc.offsetWidth; sc.classList.add("no");
+      sfx.bad();
+      const hint = v > S.target ? "Biroz kamroq!" : "Biroz ko‘proq!";
+      if (S.tries >= 2 && !S.helped) {
+        setBubble(`${hint} Keling, birga sanaymiz!`);
+        say(`${hint} Keling, birga sanaymiz!`);
+        S.busy = true;
+        later(() => { S.typed = ""; showTyped(); helpCount(); }, 2200);
+      } else {
+        setBubble(`${hint} Yana sanab ko‘r 👆`);
+        say(`${hint} Yana bir bor sanab ko‘r.`);
+        S.busy = true;
+        later(() => { S.busy = false; S.typed = ""; showTyped(); }, 1100);
+      }
+    }
+  }
+
+  function helpCount() {
+    S.helped = true; S.busy = true;
+    resetCount();
+    const objs = [...document.querySelectorAll("#field .obj")];
+    const step = S.target > 10 ? 750 : 900;
+    objs.forEach((b, i) => later(() => {
+      S.counted = i + 1;
+      markObj(b, i + 1); sfx.count(i + 1); say(cap(word(i + 1)));
+    }, i * step));
+    later(() => {
+      S.busy = false; showTyped();
+      setBubble("Endi sonni ter 👉");
+      say("Endi sonni ter!");
+    }, objs.length * step + 600);
+  }
+
+  function finish() {
+    const gold = S.results.filter((r) => r === "gold").length;
+    const all = S.results.length;
+    $("endStars").innerHTML = S.results.map((r) => `<span class="star ${r}" style="filter:${r === "gold" ? "none" : "saturate(.35) brightness(1.15)"}">⭐</span>`).join("");
+    let title, emoji, text, speech;
+    if (gold >= 8) { title = "Barakalla!"; emoji = "🏆"; }
+    else if (gold >= 5) { title = "Ofarin!"; emoji = "🥳"; }
+    else { title = "Yaxshi harakat!"; emoji = "🤗"; }
+    text = `${all} ta savoldan ${gold} tasiga birinchi urinishda to‘g‘ri javob berding!`;
+    speech = `${title} Sen ${gold ? ta(gold) : "bir nechta"} oltin yulduz yig‘ding!`;
+    $("endTitle").textContent = title; $("endEmoji").textContent = emoji; $("endText").textContent = text;
+    $("endScreen").hidden = false;
+    sfx.win(); confetti(180); later(() => confetti(140), 700);
+    say(speech);
+    $("againBtn").focus();
+  }
+
+  function setSound(on) {
+    soundOn = on;
+    $("soundBtn").textContent = on ? "🔊" : "🔇";
+    if (!on && hasSpeech) speechSynthesis.cancel();
+    try { localStorage.setItem("sanash-sound", on ? "on" : "off"); } catch (e) {}
+  }
+
+  /* ---------------- wiring ---------------- */
+  document.querySelectorAll(".level").forEach((b) => b.addEventListener("click", () => { audio(); sfx.pop(); startGame(+b.dataset.max); }));
+  $("homeBtn").addEventListener("click", goHome);
+  $("levelsBtn").addEventListener("click", goHome);
+  $("againBtn").addEventListener("click", () => startGame(S.max));
+  $("soundBtn").addEventListener("click", () => { setSound(!soundOn); audio(); if (soundOn) sfx.pop(); });
+  $("speakBtn").addEventListener("click", () => { audio(); say(question() + " Sanab ko‘r!"); });
+  $("recountBtn").addEventListener("click", () => { if (S.busy) return; resetCount(); sfx.del(); say("Qaytadan sanaymiz"); });
+  setSound(soundOn);
+
+  document.addEventListener("keydown", (e) => {
+    if ($("gameScreen").hidden || !$("endScreen").hidden) return;
+    let k = null;
+    if (/^[0-9]$/.test(e.key)) k = e.key;
+    else if (e.key === "Backspace") k = "del";
+    else if (e.key === "Enter") k = "ok";
+    if (!k) return;
+    e.preventDefault();
+    const b = keys.querySelector(`[data-k="${k}"]`);
+    if (b) { b.classList.add("pressed"); setTimeout(() => b.classList.remove("pressed"), 110); }
+    press(k);
+  });
+})();
+</script>
