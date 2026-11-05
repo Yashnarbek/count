@@ -356,7 +356,7 @@ h1 .b1 { color: var(--coral) } h1 .b2 { color: var(--sky) } h1 .b3 { color: var(
       <h3>🎁 Mening sovg‘alarim <span class="cnt" id="shelfCount"></span></h3>
       <div class="shelf-items" id="shelfItems"></div>
     </div>
-    <p class="helpline">Har bir o‘yinda 10 ta savol. Rasmlarga bosib birga sanash mumkin: har bosilganda son ovoz bilan aytiladi. Keyin pastdagi raqamlardan javobni terib, yashil ✓ tugmasini bosing. Har 5 ta to‘g‘ri javobga bitta sovg‘a beriladi!</p>
+    <p class="helpline">O‘yin to‘xtamasdan davom etadi. Rasmlarga bosib birga sanash mumkin: har bosilganda son ovoz bilan aytiladi. Keyin pastdagi raqamlardan javobni terib, yashil ✓ tugmasini bosing. Har 5 ta to‘g‘ri javobga bitta sovg‘a beriladi!</p>
     <p class="voice-note" id="voiceNote"></p>
   </section>
 
@@ -364,7 +364,7 @@ h1 .b1 { color: var(--coral) } h1 .b2 { color: var(--sky) } h1 .b3 { color: var(
   <section id="gameScreen" hidden>
     <div class="topbar">
       <button class="toy roundbtn" id="homeBtn" aria-label="Bosh sahifa">🏠</button>
-      <div class="stars" id="stars" aria-label="Yulduzlar"></div>
+      <div class="spacer" style="flex:1"></div>
       <button class="toy roundbtn fs-btn" id="fsBtn" aria-label="To‘liq ekran">⛶</button>
       <button class="toy roundbtn" id="soundBtn" aria-label="Ovozni o‘chirish yoki yoqish">🔊</button>
     </div>
@@ -677,7 +677,7 @@ h1 .b1 { color: var(--coral) } h1 .b2 { color: var(--sky) } h1 .b3 { color: var(
     S.target = nextNumber(); S.thing = nextThing();
     S.typed = ""; S.tries = 0; S.helped = false; S.counted = 0; S.busy = false;
     $("owl").classList.remove("happy");
-    renderStars(); renderField(); showTyped();
+    renderField(); showTyped();
     setBubble(question());
     say(question() + " Sanab ko‘r!");
   }
@@ -729,9 +729,10 @@ h1 .b1 { color: var(--coral) } h1 .b2 { color: var(--sky) } h1 .b3 { color: var(
     const fresh = GIFTS.filter((g) => !collection.includes(g[0]));
     return pick(fresh.length ? fresh : GIFTS);
   }
+  const giftBoxEl = $("giftBox");
   function showGift(next) {
     const prize = choosePrize();
-    const box = $("giftBox"), stage = $("giftStage");
+    const box = giftBoxEl, stage = $("giftStage");
     stage.classList.remove("open");
     stage.innerHTML = ""; stage.appendChild(box);
     $("giftName").textContent = ""; $("giftTitle").textContent = "Sovg‘a!";
@@ -800,11 +801,10 @@ h1 .b1 { color: var(--coral) } h1 .b2 { color: var(--sky) } h1 .b3 { color: var(
       say(line);
       // show every object counted, so the child sees the full count
       document.querySelectorAll("#field .obj").forEach((b, i) => markObj(b, i + 1));
-      renderStars();
       S.correctTotal++; saveProgress(); renderPips();
       later(() => {
         S.round++;
-        const next = () => { if (S.round >= ROUNDS) finish(); else newRound(); };
+        const next = () => newRound();
         if (S.correctTotal % 5 === 0) showGift(next); else next();
       }, 2600);
     } else {
