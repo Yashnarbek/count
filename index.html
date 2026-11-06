@@ -297,6 +297,9 @@ h1 .b1 { color: var(--coral) } h1 .b2 { color: var(--sky) } h1 .b3 { color: var(
 .coll-item .nm { font-weight: 800; font-size: 14px; text-align: center; line-height: 1.15; }
 .coll-item .x { font-weight: 800; font-size: 13px; color: var(--muted); }
 .coll-empty { font-weight: 800; color: var(--muted); font-size: 18px; }
+.end-btns .clear { --c: var(--coral); --ce: var(--coral-edge); color: #fff; font-size: 18px; }
+.confirm-box { display: grid; gap: 10px; justify-items: center; background: var(--tray); border: 3px solid var(--coral); border-radius: 20px; padding: 14px; width: 100%; }
+.confirm-box p { color: var(--ink) !important; }
 .gift-meter .box { font-size: 30px; line-height: 1; }
 .gift-meter.near .box { animation: wiggle .8s ease-in-out infinite; }
 .pips { display: flex; gap: 5px; }
@@ -419,7 +422,17 @@ h1 .b1 { color: var(--coral) } h1 .b2 { color: var(--sky) } h1 .b3 { color: var(
     <h2>🎁 Mening sovg‘alarim</h2>
     <p id="collText"></p>
     <div class="coll-grid" id="collGrid"></div>
-    <div class="end-btns"><button class="toy again" id="collClose">Yopish ✕</button></div>
+    <div class="end-btns">
+      <button class="toy clear" id="collClear">🗑 Sovg‘alarni o‘chirish</button>
+      <button class="toy again" id="collClose">Yopish ✕</button>
+    </div>
+    <div class="confirm-box" id="clearConfirm" hidden>
+      <p>Barcha sovg‘alar o‘chib ketadi. Rostdan ham o‘chirasizmi?</p>
+      <div class="end-btns">
+        <button class="toy clear" id="clearYes">Ha, o‘chirish</button>
+        <button class="toy" id="clearNo">Yo‘q</button>
+      </div>
+    </div>
   </div>
 </div>
 <!-- GIFT -->
@@ -747,6 +760,7 @@ h1 .b1 { color: var(--coral) } h1 .b2 { color: var(--sky) } h1 .b3 { color: var(
     $("collGrid").innerHTML = counts.size
       ? [...counts].map(([e, c], i) => `<div class="coll-item" style="animation-delay:${Math.min(i, 30) * 25}ms"><span class="e">${e}</span><span class="nm">${cap(names[e] || "")}</span>${c > 1 ? `<span class="x">×${c}</span>` : ""}</div>`).join("")
       : '<p class="coll-empty">Hali sovg‘a yo‘q. Har 5 ta to‘g‘ri javobga bitta sovg‘a!</p>';
+    $("collClear").hidden = !collection.length; $("clearConfirm").hidden = true;
     $("collScreen").hidden = false;
     say(collection.length ? "Mana sening sovg‘alaring!" : "Hali sovg‘a yo‘q");
     $("collClose").focus();
@@ -756,6 +770,13 @@ h1 .b1 { color: var(--coral) } h1 .b2 { color: var(--sky) } h1 .b3 { color: var(
   $("shelfOpen").addEventListener("click", openCollection);
   $("shelfItems").addEventListener("click", openCollection);
   $("collClose").addEventListener("click", closeCollection);
+  $("collClear").addEventListener("click", () => { sfx.pop(); $("clearConfirm").hidden = false; $("clearNo").focus(); });
+  $("clearNo").addEventListener("click", () => { sfx.pop(); $("clearConfirm").hidden = true; });
+  $("clearYes").addEventListener("click", () => {
+    collection = []; S.correctTotal = 0; saveProgress();
+    renderShelf(); if (!$("gameScreen").hidden) renderPips();
+    sfx.del(); openCollection();
+  });
   $("collScreen").addEventListener("click", (e) => { if (e.target.id === "collScreen") closeCollection(); });
   function renderShelf() {
     $("shelfCount").textContent = collection.length ? `(${collection.length})` : "";
