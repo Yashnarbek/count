@@ -286,7 +286,17 @@ h1 .b1 { color: var(--coral) } h1 .b2 { color: var(--sky) } h1 .b3 { color: var(
 #confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 30; }
 
 /* ---------- gifts ---------- */
-.gift-meter { display: flex; align-items: center; gap: 8px; font-weight: 800; color: var(--muted); }
+.gift-meter { display: flex; align-items: center; gap: 8px; font-weight: 800; color: var(--muted); border: 0; background: transparent; padding: 4px 8px; border-radius: 16px; }
+.gift-meter:hover { background: var(--tray); }
+.shelf-open { border: 0; background: transparent; padding: 0; font: inherit; color: inherit; cursor: pointer; text-align: left; }
+.coll-card { max-width: 640px; max-height: calc(100vh - 32px); overflow: auto; }
+.coll-card h2 { color: var(--berry); }
+.coll-grid { width: 100%; display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 10px; }
+.coll-item { display: grid; justify-items: center; gap: 2px; background: var(--tray); border: 3px solid var(--tray-edge); border-radius: 18px; padding: 8px 4px; animation: pop .4s both; }
+.coll-item .e { font-size: 48px; line-height: 1.1; font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; }
+.coll-item .nm { font-weight: 800; font-size: 14px; text-align: center; line-height: 1.15; }
+.coll-item .x { font-weight: 800; font-size: 13px; color: var(--muted); }
+.coll-empty { font-weight: 800; color: var(--muted); font-size: 18px; }
 .gift-meter .box { font-size: 30px; line-height: 1; }
 .gift-meter.near .box { animation: wiggle .8s ease-in-out infinite; }
 .pips { display: flex; gap: 5px; }
@@ -322,7 +332,7 @@ h1 .b1 { color: var(--coral) } h1 .b2 { color: var(--sky) } h1 .b3 { color: var(
 }
 .shelf h3 { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: 22px; display: flex; gap: 8px; align-items: center; }
 .shelf h3 .cnt { color: var(--muted); font-size: 18px; }
-.shelf-items { display: flex; flex-wrap: wrap; gap: 6px; font-size: 38px; line-height: 1.1; }
+.shelf-items { cursor: pointer; display: flex; flex-wrap: wrap; gap: 6px; font-size: 38px; line-height: 1.1; }
 .shelf-items .empty { font-size: 16px; font-weight: 700; color: var(--muted); }
 .shelf-items span { animation: pop .4s both; }
 .end-gifts { font-size: 44px; display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
@@ -353,7 +363,7 @@ h1 .b1 { color: var(--coral) } h1 .b2 { color: var(--sky) } h1 .b3 { color: var(
     </div>
     <button class="toy fs-start fs-btn" id="fsStart">⛶ To‘liq ekranda o‘ynash</button>
     <div class="shelf">
-      <h3>🎁 Mening sovg‘alarim <span class="cnt" id="shelfCount"></span></h3>
+      <h3><button class="shelf-open" id="shelfOpen">🎁 Mening sovg‘alarim <span class="cnt" id="shelfCount"></span></button></h3>
       <div class="shelf-items" id="shelfItems"></div>
     </div>
     <p class="helpline">O‘yin to‘xtamasdan davom etadi. Rasmlarga bosib birga sanash mumkin: har bosilganda son ovoz bilan aytiladi. Keyin pastdagi raqamlardan javobni terib, yashil ✓ tugmasini bosing. Har 5 ta to‘g‘ri javobga bitta sovg‘a beriladi!</p>
@@ -377,7 +387,7 @@ h1 .b1 { color: var(--coral) } h1 .b2 { color: var(--sky) } h1 .b3 { color: var(
         </div>
         <div class="field" id="field" data-size="xl"></div>
         <div class="board-foot">
-          <div class="gift-meter" id="giftMeter" aria-label="Sovg‘agacha"><span class="box">🎁</span><span class="pips" id="pips"></span></div>
+          <button class="gift-meter" id="giftMeter" aria-label="Sovg‘alarim"><span class="box">🎁</span><span class="pips" id="pips"></span></button>
           <button class="toy recount" id="recountBtn">↺ Qaytadan sanash</button>
         </div>
       </div>
@@ -401,6 +411,15 @@ h1 .b1 { color: var(--coral) } h1 .b2 { color: var(--sky) } h1 .b3 { color: var(
       <button class="toy again" id="againBtn">↻ Yana o‘ynash</button>
       <button class="toy" id="levelsBtn">🏠 Darajalar</button>
     </div>
+  </div>
+</div>
+<!-- COLLECTION -->
+<div class="overlay" id="collScreen" hidden>
+  <div class="end-card coll-card">
+    <h2>🎁 Mening sovg‘alarim</h2>
+    <p id="collText"></p>
+    <div class="coll-grid" id="collGrid"></div>
+    <div class="end-btns"><button class="toy again" id="collClose">Yopish ✕</button></div>
   </div>
 </div>
 <!-- GIFT -->
@@ -701,7 +720,7 @@ h1 .b1 { color: var(--coral) } h1 .b2 { color: var(--sky) } h1 .b3 { color: var(
   const GIFTS = [
     ["🦁", "sher"], ["🐯", "yo‘lbars"], ["🐼", "panda"], ["🐨", "koala"], ["🦒", "jirafa"], ["🐘", "fil"],
     ["🦓", "zebra"], ["🐵", "maymuncha"], ["🦊", "tulki"], ["🐧", "pingvin"], ["🦄", "sehrli ot"], ["🐬", "delfin"],
-    ["🐢", "toshbaqa"], ["🦜", "to‘tiqush"], ["🐻", "ayiq"], ["🐴", "toychoq"],
+    ["🐢", "toshbaqa"], ["🦜", "to‘tiqush"], ["🐻", "ayiq"], ["🐴", "toychoq"], ["🐆", "gepard"],
     ["🚒", "o‘t o‘chirish mashinasi"], ["🚓", "politsiya mashinasi"], ["🚑", "tez yordam mashinasi"], ["🚜", "traktor"],
     ["🏎️", "poyga mashinasi"], ["🚂", "poyezd"], ["✈️", "samolyot"], ["🚁", "vertolyot"], ["🛻", "yuk mashinasi"], ["🚙", "jip"],
     ["🍍", "ananas"], ["🥭", "mango"], ["🍇", "uzum"], ["🍉", "tarvuz"], ["🍑", "shaftoli"], ["🥝", "kivi"],
@@ -719,6 +738,25 @@ h1 .b1 { color: var(--coral) } h1 .b2 { color: var(--sky) } h1 .b3 { color: var(
     $("giftMeter").classList.toggle("near", have === 4);
     $("giftMeter").setAttribute("aria-label", `Sovg‘agacha yana ${5 - have} ta to‘g‘ri javob`);
   }
+  function openCollection() {
+    audio(); sfx.pop();
+    const counts = new Map();
+    collection.forEach((e) => counts.set(e, (counts.get(e) || 0) + 1));
+    const names = Object.fromEntries(GIFTS);
+    $("collText").textContent = collection.length ? `Jami ${collection.length} ta sovg‘a, ${counts.size} xil` : "";
+    $("collGrid").innerHTML = counts.size
+      ? [...counts].map(([e, c], i) => `<div class="coll-item" style="animation-delay:${Math.min(i, 30) * 25}ms"><span class="e">${e}</span><span class="nm">${cap(names[e] || "")}</span>${c > 1 ? `<span class="x">×${c}</span>` : ""}</div>`).join("")
+      : '<p class="coll-empty">Hali sovg‘a yo‘q. Har 5 ta to‘g‘ri javobga bitta sovg‘a!</p>';
+    $("collScreen").hidden = false;
+    say(collection.length ? "Mana sening sovg‘alaring!" : "Hali sovg‘a yo‘q");
+    $("collClose").focus();
+  }
+  function closeCollection() { $("collScreen").hidden = true; sfx.pop(); }
+  $("giftMeter").addEventListener("click", openCollection);
+  $("shelfOpen").addEventListener("click", openCollection);
+  $("shelfItems").addEventListener("click", openCollection);
+  $("collClose").addEventListener("click", closeCollection);
+  $("collScreen").addEventListener("click", (e) => { if (e.target.id === "collScreen") closeCollection(); });
   function renderShelf() {
     $("shelfCount").textContent = collection.length ? `(${collection.length})` : "";
     $("shelfItems").innerHTML = collection.length
@@ -880,7 +918,7 @@ h1 .b1 { color: var(--coral) } h1 .b2 { color: var(--sky) } h1 .b3 { color: var(
   renderShelf();
 
   document.addEventListener("keydown", (e) => {
-    if ($("gameScreen").hidden || !$("endScreen").hidden || !$("giftScreen").hidden) return;
+    if ($("gameScreen").hidden || !$("endScreen").hidden || !$("giftScreen").hidden || !$("collScreen").hidden) return;
     let k = null;
     if (/^[0-9]$/.test(e.key)) k = e.key;
     else if (e.key === "Backspace") k = "del";
