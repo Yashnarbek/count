@@ -201,7 +201,7 @@ h1 .b1 { color: var(--coral) } h1 .b2 { color: var(--sky) } h1 .b3 { color: var(
   animation: pop .45s cubic-bezier(.3, 1.6, .5, 1) both;
 }
 .obj:hover { background: color-mix(in srgb, var(--sun) 25%, transparent); }
-.obj.counted { background: color-mix(in srgb, var(--sun) 35%, transparent); }
+.obj.counted { background: color-mix(in srgb, var(--grass) 30%, transparent); box-shadow: inset 0 0 0 3px var(--grass); }
 .obj.flash { animation: bounce .45s ease-out; }
 .obj .n {
   position: absolute; top: -6px; right: -6px;
@@ -668,9 +668,7 @@ h1 .b1 { color: var(--coral) } h1 .b2 { color: var(--sky) } h1 .b3 { color: var(
   function markObj(b, num) {
     b.classList.add("counted");
     b.classList.remove("flash"); void b.offsetWidth; b.classList.add("flash");
-    let badge = b.querySelector(".n");
-    if (!badge) { badge = document.createElement("span"); badge.className = "n"; b.appendChild(badge); }
-    badge.textContent = num;
+    b.dataset.n = num; // no number shown: the highlight and the spoken number mark the tap
   }
 
   function tapObj(b) {
